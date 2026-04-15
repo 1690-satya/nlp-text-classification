@@ -1,82 +1,100 @@
-# NLP Text Classification Project
+# 🚀 NLP Text Classification
 
-End-to-end NLP classification pipeline using TF-IDF baseline and fine-tuned DistilBERT for sentiment analysis or fake news detection.
+A polished sentiment classification pipeline with both a lightweight TF-IDF baseline and a fine-tuned DistilBERT transformer model.
 
-## Overview
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.8+-blue?logo=python" alt="Python">
+  <img src="https://img.shields.io/badge/PyTorch-2.0+-orange?logo=pytorch" alt="PyTorch">
+  <img src="https://img.shields.io/badge/Transformers-Hugging%20Face-blueviolet?logo=huggingface" alt="Transformers">
+  <img src="https://img.shields.io/badge/scikit--learn-1.2+-yellow?logo=scikit-learn" alt="scikit-learn">
+</p>
 
-- **Baseline**: TF-IDF + Logistic Regression
-- **Advanced**: Fine-tuned DistilBERT (Hugging Face Transformers)
-- **Evaluation**: Accuracy, Precision, Recall, F1-score + Confusion Matrices
+## 💡 What is this project?
 
-## Project Structure
+This repository demonstrates a real-world NLP workflow:
 
-```
+- **Baseline model** using TF-IDF + Logistic Regression
+- **Transformer model** using DistilBERT fine-tuning
+- **Automated preprocessing** and dataset conversion
+- **Full evaluation** with graphs and classification reports
+
+## 📌 Why it matters
+
+This project is a strong showcase for a developer who wants to build practical NLP systems with both classic machine learning and modern transformer techniques. It is ideal for portfolio presentation or iterative model experimentation.
+
+## 🚀 Features
+
+- Clean text preprocessing for noisy IMDB reviews
+- Train/test split with stratified sampling
+- Reusable model classes for baseline and transformer workflows
+- Automatic saving of evaluation visuals
+- Lightweight configuration via `config.py`
+
+## 🧱 Project structure
+
+```text
 NLP Text Classification/
-├── main.py                  # Entry point - run this script
-├── config.py                # Configuration settings
-├── data_loader.py           # Data loading and preprocessing
+├── main.py                  # Entry point for running the full pipeline
+├── config.py                # Project settings and model parameters
+├── data_loader.py           # Data ingestion and preprocessing logic
 ├── models.py                # Baseline and transformer models
-├── visualizations.py        # Plotting functions
-├── requirements.txt         # Dependencies
-├── README.md                # Documentation
-└── results/                 # Output directory (auto-created)
-    ├── class_distribution.png
-    ├── confusion_matrices.png
-    └── metrics_comparison.png
+├── visualizations.py        # Plot generation and result reporting
+├── requirements.txt         # Python dependencies
+├── README.md                # Project documentation
+├── IMDB Dataset.csv         # Raw IMDB dataset input file
+└── results/                 # Generated output plots and reports
 ```
 
-## Quick Start
+## 🛠️ Quick Start
 
 ```bash
-# Install dependencies
 pip install -r requirements.txt
-
-# Run the complete pipeline
 python main.py
 ```
 
-## How It Works
+> Note: Place `IMDB Dataset.csv` in the repository root before running. The pipeline auto-converts it into `data/dataset.csv` on first run.
 
-1. **data_loader.py** - Loads IMDB dataset, cleans text, splits into train/test
-2. **models.py** - Contains `BaselineModel` (TF-IDF + LR) and `TransformerModel` (DistilBERT)
-3. **visualizations.py** - Creates 3 plots: class distribution, confusion matrices, metrics comparison
-4. **config.py** - Central settings (paths, model parameters, etc.)
-5. **main.py** - Orchestrates the entire pipeline
+## 🧠 How it works
 
-## Visualizations
+1. `data_loader.py` loads the raw dataset, validates columns, and preprocesses reviews.
+2. `main.py` orchestrates the workflow, including visualizations and evaluation.
+3. `models.py` trains and evaluates both a TF-IDF baseline and a DistilBERT classifier.
+4. `visualizations.py` generates publication-quality charts for model performance.
 
-1. **Class Distribution** - Bar chart showing dataset balance
-2. **Confusion Matrices** - Side-by-side heatmaps for both models
-3. **Metrics Comparison** - Grouped bar chart (Accuracy, Precision, Recall, F1)
+## 📊 Result outputs
 
-All plots are automatically saved to the `results/` folder.
+The pipeline produces:
 
-## Dataset
+- `results/class_distribution.png`
+- `results/confusion_matrices.png`
+- `results/metrics_comparison.png`
 
-Place your `IMDB Dataset.csv` in the project folder (it will be auto-converted to the correct format).
+## 📦 Tech stack
 
-Expected IMDB format:
-- `review` column: The movie review text
-- `sentiment` column: "positive" or "negative"
-
-## Requirements
-
-- Python 3.8+
-- PyTorch
-- Transformers (Hugging Face)
+- Python
+- pandas
+- NumPy
 - scikit-learn
-- matplotlib, seaborn
-- GPU recommended for transformer training
+- PyTorch
+- Hugging Face Transformers
+- Matplotlib
+- Seaborn
 
-## Configuration
+## 🌟 What makes this repo "seasoned dev" quality?
 
-Edit `config.py` to customize:
-- `EPOCHS`: Number of training epochs (default: 2)
-- `BATCH_SIZE`: Training batch size (default: 8)
-- `MAX_FEATURES`: TF-IDF features (default: 5000)
+- Clear and structured documentation
+- Robust input validation and preprocessing
+- Modular architecture with reusable components
+- Visual reports for model comparison
+- Clean code and minimal duplication
 
-## Tips
+## 📈 Take it further
 
-- First run will download DistilBERT (~250MB)
-- Transformer training is slow on CPU - use GPU if available
-- Results are saved in `results/` directory automatically
+- Add support for more datasets
+- Implement cross-validation for the baseline model
+- Add model checkpointing and demo prediction script
+- Deploy the transformer model as a web API
+
+## 📬 Connect
+
+If you want, I can also help build a dedicated GitHub profile README with a developer introduction, stats cards, and featured project highlights.
