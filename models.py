@@ -40,6 +40,21 @@ class BaselineModel:
         return predictions, accuracy
 
 
+class TextDataset(torch.utils.data.Dataset):
+    def __init__(self, encodings, labels=None):
+        self.encodings = encodings
+        self.labels = torch.tensor(labels.values) if labels is not None else None
+
+    def __getitem__(self, idx):
+        item = {key: val[idx] for key, val in self.encodings.items()}
+        if self.labels is not None:
+            item['labels'] = self.labels[idx]
+        return item
+
+    def __len__(self):
+        return len(self.encodings['input_ids'])
+
+
 class TransformerModel:
     """DistilBERT transformer model."""
     
@@ -62,33 +77,17 @@ class TransformerModel:
         """Train the transformer model."""
         print("\nTraining transformer model (DistilBERT)...")
         
-        # Create datasets
         train_encodings = self._tokenize(X_train)
         test_encodings = self._tokenize(X_test)
-        
-        class TextDataset(torch.utils.data.Dataset):
-            def __init__(self, encodings, labels):
-                self.encodings = encodings
-                self.labels = torch.tensor(labels.values)
-            
-            def __getitem__(self, idx):
-                item = {key: val[idx] for key, val in self.encodings.items()}
-                item['labels'] = self.labels[idx]
-                return item
-            
-            def __len__(self):
-                return len(self.labels)
         
         train_dataset = TextDataset(train_encodings, y_train)
         test_dataset = TextDataset(test_encodings, y_test)
         
-        # Initialize model
         self.model = AutoModelForSequenceClassification.from_pretrained(
             config.TRANSFORMER_MODEL,
             num_labels=2
         )
         
-        # Training arguments
         training_args = TrainingArguments(
             output_dir=config.RESULTS_DIR,
             num_train_epochs=config.EPOCHS,
@@ -99,7 +98,6 @@ class TransformerModel:
             save_strategy="no"
         )
         
-        # Trainer
         self.trainer = Trainer(
             model=self.model,
             args=training_args,
@@ -107,35 +105,19 @@ class TransformerModel:
             eval_dataset=test_dataset
         )
         
-        # Train
         self.trainer.train()
         print("Transformer model trained!")
     
-    def predict(self, X_test, y_test):
+    def predict(self, X_test):
         """Make predictions."""
         test_encodings = self._tokenize(X_test)
-        
-        class TextDataset(torch.utils.data.Dataset):
-            def __init__(self, encodings, labels):
-                self.encodings = encodings
-                self.labels = torch.tensor(labels.values)
-            
-            def __getitem__(self, idx):
-                item = {key: val[idx] for key, val in self.encodings.items()}
-                item['labels'] = self.labels[idx]
-                return item
-            
-            def __len__(self):
-                return len(self.labels)
-        
-        test_dataset = TextDataset(test_encodings, y_test)
+        test_dataset = TextDataset(test_encodings)
         predictions = self.trainer.predict(test_dataset)
-        preds = np.argmax(predictions.predictions, axis=1)
-        return preds
+        return np.argmax(predictions.predictions, axis=1)
     
     def evaluate(self, X_test, y_test):
         """Evaluate model performance."""
-        predictions = self.predict(X_test, y_test)
+        predictions = self.predict(X_test)
         accuracy = accuracy_score(y_test, predictions)
         print(f"\nTransformer Model Accuracy: {accuracy:.4f}")
         print("\nClassification Report:")

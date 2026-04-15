@@ -19,7 +19,6 @@ NLP Text Classification/
 ├── visualizations.py        # Plotting functions
 ├── requirements.txt         # Dependencies
 ├── README.md                # Documentation
-├── NLP_Text_Classification.ipynb  # Original notebook (optional)
 └── results/                 # Output directory (auto-created)
     ├── class_distribution.png
     ├── confusion_matrices.png

@@ -37,6 +37,7 @@ def plot_class_distribution(data, save_path=None):
         plt.savefig(save_path, dpi=150, bbox_inches='tight')
         print(f"Saved to {save_path}")
     plt.show()
+    plt.close(fig)
 
 
 def plot_confusion_matrices(y_test, baseline_preds, transformer_preds, 
@@ -71,6 +72,7 @@ def plot_confusion_matrices(y_test, baseline_preds, transformer_preds,
         plt.savefig(save_path, dpi=150, bbox_inches='tight')
         print(f"Saved to {save_path}")
     plt.show()
+    plt.close(fig)
 
 
 def plot_metrics_comparison(y_test, baseline_preds, transformer_preds,
@@ -123,6 +125,7 @@ def plot_metrics_comparison(y_test, baseline_preds, transformer_preds,
         plt.savefig(save_path, dpi=150, bbox_inches='tight')
         print(f"Saved to {save_path}")
     plt.show()
+    plt.close(fig)
     
     # Print table
     print("\n" + "=" * 60)
