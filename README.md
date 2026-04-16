@@ -80,21 +80,5 @@ The pipeline produces:
 - Matplotlib
 - Seaborn
 
-## 🌟 What makes this repo "seasoned dev" quality?
 
-- Clear and structured documentation
-- Robust input validation and preprocessing
-- Modular architecture with reusable components
-- Visual reports for model comparison
-- Clean code and minimal duplication
 
-## 📈 Take it further
-
-- Add support for more datasets
-- Implement cross-validation for the baseline model
-- Add model checkpointing and demo prediction script
-- Deploy the transformer model as a web API
-
-## 📬 Connect
-
-If you want, I can also help build a dedicated GitHub profile README with a developer introduction, stats cards, and featured project highlights.
