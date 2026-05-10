@@ -1,81 +1,138 @@
-# 🚀 NLP Text Classification
+# NLP Text Classification
 
-A polished sentiment classification pipeline with both a lightweight TF-IDF baseline and a fine-tuned DistilBERT transformer model.
+A lightweight, GPU-free sentiment classification pipeline comparing **TF-IDF + Logistic Regression** and **Count Vectorizer + Naive Bayes**, both using **unigram and bigram** features.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.8+-blue?logo=python" alt="Python">
-  <img src="https://img.shields.io/badge/PyTorch-2.0+-orange?logo=pytorch" alt="PyTorch">
-  <img src="https://img.shields.io/badge/Transformers-Hugging%20Face-blueviolet?logo=huggingface" alt="Transformers">
-  <img src="https://img.shields.io/badge/scikit--learn-1.2+-yellow?logo=scikit-learn" alt="scikit-learn">
-</p>
+[![Python](https://img.shields.io/badge/Python-3.8+-blue?logo=python)](https://www.python.org/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-1.2+-yellow?logo=scikit-learn)](https://scikit-learn.org/)
 
-## 💡 What is this project?
+---
 
-This repository demonstrates a real-world NLP workflow:
+## Table of Contents
 
-- **Baseline model** using TF-IDF + Logistic Regression
-- **Transformer model** using DistilBERT fine-tuning
-- **Automated preprocessing** and dataset conversion
-- **Full evaluation** with graphs and classification reports
+- [Overview](#overview)
+- [Models](#models)
+- [Project Structure](#project-structure)
+- [Quick Start](#quick-start)
+- [How It Works](#how-it-works)
+- [Outputs](#outputs)
+- [Tech Stack](#tech-stack)
 
+---
 
-## 🚀 Features
+## Overview
 
-- Clean text preprocessing for noisy IMDB reviews
-- Train/test split with stratified sampling
-- Reusable model classes for baseline and transformer workflows
-- Automatic saving of evaluation visuals
-- Lightweight configuration via `config.py`
+This project demonstrates a complete NLP workflow in pure Python:
 
-## 🧱 Project structure
+- Load and clean raw IMDB review text
+- Vectorize with unigrams and bigrams
+- Train two classic ML models side-by-side
+- Compare performance with saved plots and reports
+
+No transformers, no PyTorch, no GPU required.
+
+---
+
+## Models
+
+| Model | Vectorizer | Classifier | N-grams | Key Traits |
+|-------|------------|------------|---------|------------|
+| **Logistic Regression** | TF-IDF | LogisticRegression | (1, 2) | Strong baseline, interpretable weights |
+| **Naive Bayes** | Count Vectorizer | MultinomialNB | (1, 2) | Fast, works well with word counts |
+
+Both models are capped at `10,000` features and remove English stop words.
+
+---
+
+## Project Structure
 
 ```text
-NLP Text Classification/
-├── main.py                  # Entry point for running the full pipeline
-├── config.py                # Project settings and model parameters
-├── data_loader.py           # Data ingestion and preprocessing logic
-├── models.py                # Baseline and transformer models
-├── visualizations.py        # Plot generation and result reporting
-├── requirements.txt         # Python dependencies
-├── README.md                # Project documentation
-├── IMDB Dataset.csv         # Raw IMDB dataset input file
-└── results/                 # Generated output plots and reports
+nlp-text-classification/
+├── main.py              # Pipeline entry point
+├── config.py            # Paths, hyperparameters, random seed
+├── data_loader.py       # Load IMDB CSV, clean text, split data
+├── models.py            # LogisticRegressionModel & NaiveBayesModel
+├── visualizations.py    # Generate and save evaluation charts
+├── requirements.txt     # Python dependencies
+├── README.md            # This file
+└── results/             # Auto-created output folder for plots
 ```
 
-## 🛠️ Quick Start
+---
 
-```bash
-pip install -r requirements.txt
-python main.py
+## Quick Start
+
+1. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Add your dataset**
+   - Place `IMDB Dataset.csv` in the project root (columns: `review`, `sentiment`).
+   - Or place a preprocessed `data/dataset.csv` (columns: `text`, `label`).
+
+3. **Run the pipeline**
+   ```bash
+   python main.py
+   ```
+
+> On the first run, the script auto-converts `IMDB Dataset.csv` into `data/dataset.csv`.
+
+---
+
+## How It Works
+
+| Step | File | Action |
+|------|------|--------|
+| 1 | `data_loader.py` | Loads CSV, validates columns, cleans text, splits 80/20 stratified |
+| 2 | `main.py` | Orchestrates training, evaluation, and plotting |
+| 3 | `models.py` | Fits TF-IDF + LR and Count + NB on the training set |
+| 4 | `visualizations.py` | Saves class distribution, confusion matrices, and metrics comparison |
+
+---
+
+## Outputs
+
+After running `main.py`, check the `results/` folder:
+
+| File | Description |
+|------|-------------|
+| `class_distribution.png` | Bar chart of positive vs negative samples |
+| `confusion_matrices.png` | Side-by-side confusion matrices for both models |
+| `metrics_comparison.png` | Grouped bar chart of accuracy, precision, recall, F1 |
+
+### Sample Console Output
+
+```
+============================================================
+NLP TEXT CLASSIFICATION PROJECT
+TF-IDF + Logistic Regression  vs.  Count Vectorizer + Naive Bayes
+============================================================
+
+[1/5] Loading data...
+[2/5] Visualizing class distribution...
+[3/5] Preprocessing data...
+[4/5] Splitting data...
+[5/5] Training models...
+
+Logistic Regression Accuracy: 0.8901
+Naive Bayes Accuracy: 0.8532
+
+Generating visualizations...
+============================================================
+PIPELINE COMPLETE!
+Results saved to: results/
+============================================================
 ```
 
-> Note: Place `IMDB Dataset.csv` in the repository root before running. The pipeline auto-converts it into `data/dataset.csv` on first run.
+---
 
-## 🧠 How it works
+## Tech Stack
 
-1. `data_loader.py` loads the raw dataset, validates columns, and preprocesses reviews.
-2. `main.py` orchestrates the workflow, including visualizations and evaluation.
-3. `models.py` trains and evaluates both a TF-IDF baseline and a DistilBERT classifier.
-4. `visualizations.py` generates publication-quality charts for model performance.
-
-## 📊 Result outputs
-
-The pipeline produces:
-
-- `results/class_distribution.png`
-- `results/confusion_matrices.png`
-- `results/metrics_comparison.png`
-
-## 📦 Tech stack
-
-- Python
-- pandas
-- NumPy
-- scikit-learn
-- PyTorch
-- Hugging Face Transformers
-- Matplotlib
-- Seaborn
+- **Python**
+- **pandas** – data loading and manipulation
+- **NumPy** – numerical operations
+- **scikit-learn** – vectorization, modeling, metrics
+- **Matplotlib & Seaborn** – plotting
 
 
 
