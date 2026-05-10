@@ -18,9 +18,6 @@ This repository demonstrates a real-world NLP workflow:
 - **Automated preprocessing** and dataset conversion
 - **Full evaluation** with graphs and classification reports
 
-## 📌 Why it matters
-
-This project is a strong showcase for a developer who wants to build practical NLP systems with both classic machine learning and modern transformer techniques. It is ideal for portfolio presentation or iterative model experimentation.
 
 ## 🚀 Features
 
