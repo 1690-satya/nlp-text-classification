@@ -21,7 +21,7 @@ def load_data():
             raise ValueError("IMDB dataset must contain 'review' and 'sentiment' columns.")
         data = data.rename(columns={'review': 'text'})
         data['label'] = data['sentiment'].map({'positive': 1, 'negative': 0})
-        data = data[['text', 'label']]
+        data = data[['text', 'label']].dropna()
         _ensure_data_dir()
         data.to_csv(config.DATA_PATH, index=False)
     elif os.path.exists(config.DATA_PATH):
@@ -29,6 +29,7 @@ def load_data():
         data = pd.read_csv(config.DATA_PATH)
         if 'text' not in data.columns or 'label' not in data.columns:
             raise ValueError("Preprocessed dataset must contain 'text' and 'label' columns.")
+        data = data[['text', 'label']].dropna()
     else:
         raise FileNotFoundError(
             f"Dataset not found. Place '{config.IMDB_PATH}' or '{config.DATA_PATH}' in the project folder."
@@ -41,15 +42,22 @@ def clean_text(text):
     """Clean and normalize text."""
     text = str(text).lower()
     text = re.sub(r'http\S+', '', text)
-    text = re.sub(r'[^a-zA-Z ]', '', text)
+    text = re.sub(r'<.*?>', '', text)
+    text = re.sub(r'[^a-z\s]', '', text)
     text = re.sub(r'\s+', ' ', text).strip()
-    return text
+    return text if text else 'unknown'
 
 
 def preprocess_data(data):
     """Apply preprocessing to dataset."""
     print("Preprocessing text data...")
     data['clean_text'] = data['text'].apply(clean_text)
+    empty_count = (data['clean_text'] == 'unknown').sum()
+    if empty_count > 0:
+        print(
+            f"Warning: {empty_count} sample(s) became empty "
+            "after cleaning and were set to 'unknown'."
+        )
     return data
 
 
